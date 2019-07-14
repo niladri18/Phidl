@@ -54,7 +54,7 @@ def makeCross(x0,y0,width,lw, layer):
 	return cross
 	
 #==============================================================================
-# Define the layers
+# Template for creating a PPE macro
 #==============================================================================
 D = Device('PPE')
 layer = 1
