@@ -50,9 +50,29 @@ def fibonacci(n, width = 0.008, angle_resolution = 1.5, layer = 0):
 		start_angle += dtheta
 	
 	return F
+
+def makeResonator(radius = 10, width = 0.5, space = 1.0):
+	#------------------------
+	# Make a ring resonator
+	# radius: of the ring
+	# width: of the ring and the line
+	# space: space between the edge of the ring and the line
+	#------------------------
+	C= Device("Resonator")
+	R = pg.ring(radius = radius, width = width)
+	C.add_ref(R)
+	L1 = makeLine(radius+space,-radius,width,2*radius)
+	C.add_ref(L1)
+	L2 = makeLine(-radius-space-width,-radius,width,2*radius)
+	C.add_ref(L2)
 	
 
-def makeLine(x0,y0,width, height, layer):
+	return C
+	
+		
+	
+
+def makeLine(x0,y0,width, height, layer=0):
 	L = Device('line')
 	L.add_polygon([(x0, y0), (x0 + width, y0), (x0 + width, y0+ height), (x0, y0+ height)], layer = layer)
 	return L
@@ -84,10 +104,12 @@ def makeLineSpace(x0,y0,width, height,pitch,ymax, layer):
 	return y0, LS
 
 def makeCross(x0,y0,width,lw, layer):
+	#--------------------------------
 	# Make cross with 
 	# x0,y0 : center
 	# width: width of the bounding box
 	# lw: linewidth
+	#----------------------------------
 	cross = Device("cross")
 	cross.add_polygon([(x0-width/2,y0-lw/2),(x0-width/2,y0+lw/2), (x0+width/2,y0+lw/2), (x0+width/2,y0-lw/2) ], layer = layer)
 	cross.add_polygon([(x0-lw/2,y0-width/2),(x0-lw/2,y0+width/2), (x0+lw/2,y0+width/2), (x0+lw/2,y0-width/2) ], layer = layer)
@@ -95,12 +117,21 @@ def makeCross(x0,y0,width,lw, layer):
 
 
 def main():
+
+	#---- Example of using the templates---#
 	D = Device()
 
+
+	# Make a golden spiral with 1000 grids
 	F = fibonacci(1000)
 	D.add_ref(F)
-
 	D.write_gds("spiral.gds")
+
+	# Make a ring resonator
+	D2 = Device()
+	C = makeResonator()
+	D2.add_ref(C)
+	D2.write_gds("resonator.gds")
 
 
 
